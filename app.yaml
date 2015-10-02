@@ -1,0 +1,100 @@
+application: sacred-highway-108321
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /social
+  script: SocialHandler.app
+  login: required
+
+- url: /update
+  script: TrendingHandler.app
+  login: required
+
+- url: /trending
+  script: TrendingHandler.app
+  login: required
+
+- url: /countdown
+  script: TrendingHandler.app
+  #slogin: admin
+
+- url: /error
+  script: ErrorHandler.app
+  login: required
+
+- url: /manage
+  script: ManagementHandler.app
+  login: required
+
+- url: /deletestream
+  script: ManagementHandler.app
+  login: required
+
+- url: /unsubscribe
+  script: ManagementHandler.app
+  login: required
+
+- url: /create
+  script: CreateHandler.app
+  login: required
+
+- url: /sign
+  script: CreateHandler.app
+  login: required
+
+- url: /view
+  script: ViewHandler.app
+  login: required
+
+- url: /searchresult
+  script: SearchHandler.app
+  login: required
+
+- url: /search
+  script: SearchHandler.app
+  login: required
+
+- url: /clearviewcount
+  script: ViewSingleHandler.app
+  #login: admin
+
+- url: /subscribe.*
+  script: ViewSingleHandler.app
+  login: required
+
+- url: /unsubscribesingle.*
+  script: ViewSingleHandler.app
+  login: required
+
+- url: /showmore.*
+  script: ViewSingleHandler.app
+  login: required
+
+- url: /pic.*
+  script: ViewSingleHandler.app
+  login: required
+
+- url: /upload
+  script: ViewSingleHandler.app
+  login: required
+
+- url: /stream.*
+  script: ViewSingleHandler.app
+  login: required
+
+- url: /.*
+  script: LoginHandler.app
+  #slogin: required
+
+libraries:
+- name: webapp2
+  version: latest
+
+- name: PIL
+  version: latest
+
+- name: jinja2
+  version: latest

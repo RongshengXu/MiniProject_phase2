@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<body>
+    <h1>Connex.us</h1>
+    <table cellspacing="15">
+        <tr>
+            <td><a href="manage">Manage</a></td>
+            <th>|</th>
+            <td><a href="create">Create</a></td>
+            <th>|</th>
+            <td><a href="view">View</a></td>
+            <th>|</th>
+            <td><a href="search">Search</a></td>
+            <th>|</th>
+            <td  style="background-color:gray"><a href="trending">Trending</a></td>
+            <th>|</th>
+            <td><a href="social">Social</a></td>
+        </tr>
+    </table>
+    <hr size="5" />
+    <h3>Top 3 Trending Streams</h3>
+    <table border="0" style="width:100%">
+        {% for info in infos %}
+            <td>
+                <div style = "position:relative;">
+                    <a href="{{info[2]}}">
+                        <img src="{{info[1]}}" height="150" width="150"></img>
+                        <div style = "position: relative; left:65px; top:0px">{{info[0]}}</div>
+                    </a>
+                    <div style = "position: relative; left:10px; top:5px">{{info[3]}} views in past hour</div>
+                </div>
+            </td>
+        {% endfor %}
+    </table>
+    <hr>
+    <h3>Email trending report</h3>
+    <form action="/update" method="post">
+        <input type="radio" name="frequency" value="No reports" checked>No reports</input><br>
+        <input type="radio" name="frequency" value="Every 5 minutes">Every 5 minutes</input><br>
+        <input type="radio" name="frequency" value="Every 1 hour">Every 1 hour</input><br>
+        <input type="radio" name="frequency" value="Every day">Every day</input><br>
+        <input type="submit" value="Update rate">
+    </form>
+    <hr>
+    Present frequency: {{freq}}
+</body>
+</html>
+{% endautoescape %}

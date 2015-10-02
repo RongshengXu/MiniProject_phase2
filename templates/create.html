@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<body>
+    <h1>Connex.us</h1>
+    <table cellspacing="15">
+        <tr>
+            <td><a href="manage">Manage</a></td>
+            <th>|</th>
+            <td style="background-color:gray"><a href="create">Create</a></td>
+            <th>|</th>
+            <td><a href="view">View</a></td>
+            <th>|</th>
+            <td><a href="search">Search</a></td>
+            <th>|</th>
+            <td><a href="trending">Trending</a></td>
+            <th>|</th>
+            <td><a href="social">Social</a></td>
+        </tr>
+    </table>
+    <hr size="5" />
+    <br>
+
+    <form action="/sign" method="post">
+        <table>
+            <tr>
+                <td><textarea name="streamname" rows="3" cols="60" placeholder = "Big news"></textarea></td>
+                <td><textarea name="streamtags" rows="3" cols="60" placeholder = "#UTexas, #Too young too simple, #Naive"></textarea></td>
+            </tr>
+            <tr>
+                <td align="center" valign="top"><b><big>Name Your Stream</big></b></td>
+                <td align="center" valign="top"><b><big>Tag Your Stream</big></b></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <br>
+        <table>
+            <tr>
+                <td><textarea name="subscribers" rows="3" cols="60" placeholder = "Input subscribers' emails"></textarea></td>
+                <td><textarea name="url" rows="3" cols="60" placeholder = "cover page URL"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea name="context" rows="3" cols="60" placeholder="Option message for invite" ></textarea></td>
+                <td align="center" valign="top" ><b><big>URL to to Cover Image</big></b></td>
+            </tr>
+            <tr>
+                <td align="center" valign="top"><b><big>Add Subscribers</big></b></td>
+            </tr>
+        </table>
+        <input type="submit" value="Create Stream">
+    </form>
+</body>
+</html>
+{% endautoescape %}

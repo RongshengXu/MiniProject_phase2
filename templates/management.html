@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<body>
+    <h1>Connex.us</h1>
+    <table cellspacing="15">
+        <tr>
+            <td style="background-color:gray"><a href="manage">Manage</a></td>
+            <th>|</th>
+            <td><a href="create">Create</a></td>
+            <th>|</th>
+            <td><a href="view">View</a></td>
+            <th>|</th>
+            <td><a href="search">Search</a></td>
+            <th>|</th>
+            <td><a href="trending">Trending</a></td>
+            <th>|</th>
+            <td><a href="social">Social</a></td>
+            <th>|</th>
+            <td><a href={{url}}>{{url_linktext}}</a><td>
+        </tr>
+    </table>
+    <hr size="5" />
+    <h3>Streams I own</h3>
+    <form action="/deletestream", method="post">
+        <table border="1" style="width:100%">
+            <tr><td>Name</td><td>Last New Picture</td><td>Number of Pictures</td><td>Delete</td></tr>
+            {% if stream_query_len > 0  %}
+                {% for stream in stream_query %}
+                    <tr>
+                        <td><a href="{{stream.url}}">{{stream.name}}</a></td>
+                        <td>{{stream.lastUpdated}}</td>
+                        <td>{{stream.totalPicture}}</td>
+                        <td><input type="checkbox" name="deleteStream", value="{{stream.name}}"></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td align="center" colspan="4">No data available in table</td></tr>
+            {% endif %}
+        </table>
+        <input type="submit" value ="Delete Checked">
+    </form>
+    <h3>Streams I Subscribe to</h3>
+    <form action="/unsubscribe", method="post">
+        <table border="1" style="width:100%">
+            <tr><td>Name</td><td>Last New Picture</td><td>Number of Pictures</td><td>Unsubscribe</td></tr>
+            {% if stream_query_all_len > 0 %}
+                {% for stream in stream_query_all %}
+                    {% if user.nickname() in stream.subscribers %}
+                        <tr>
+                            <td><a href="{{stream.url}}">{{stream.name}}</a></td>
+                            <td>{{stream.lastUpdated}}</td>
+                            <td>{{stream.totalPicture}}</td>
+                            <td><input type="checkbox" name="unSubscribe", value={{stream.name}}></td>
+                        </tr>
+                    {% endif %}
+                {%  endfor %}
+            {% endif %}
+            {% if not find_done %}
+                <tr><td align="center" colspan="4">No data available in table</td></tr>
+            {% endif %}
+        </table>
+        <input type="submit" value ="Unsubscribe Checked">
+    </form>
+</body>
+</html>
+{% endautoescape %}

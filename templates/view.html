@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% autoescape true%}
+<html xmlns="http://www.w3.org/1999/html">
+<body>
+    <h1>Connex.us</h1>
+    <table cellspacing="15">
+        <tr>
+            <td><a href="manage">Manage</a></td>
+            <th>|</th>
+            <td><a href="create">Create</a></td>
+            <th>|</th>
+            <td style="background-color:gray"><a href="view">View</a></td>
+            <th>|</th>
+            <td><a href="search">Search</a></td>
+            <th>|</th>
+            <td><a href="trending">Trending</a></td>
+            <th>|</th>
+            <td><a href="social">Social</a></td>
+        </tr>
+    </table>
+    <hr size="5" />
+    <h3>View All Streams</h3>
+    <table border="0" style="width:100%">
+        {% if stream_query_len > 0%}
+            {% for item in index_info %}
+                {% if item[3] == 0 %}
+                    <tr>
+                {% endif %}
+                <td>
+                    <a href="{{item[2]}}">
+                        <div style = "position:relative;">
+                            <img src="{{item[1]}}" height="150" width="150">
+                            </img>
+                            <div style = "position: relative; left:65px; top:0px">{{item[0]}}</div>
+                        </div>
+                    </a>
+                </td>
+                {% if item[3] == 3 %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <tr><td>No streams are available</td></tr>
+        {% endif %}
+    </table>
+</body>
+</html>
+{% endautoescape %}

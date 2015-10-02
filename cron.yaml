@@ -1,0 +1,6 @@
+cron:
+- url: /countdown
+  schedule: every 5 minutes
+
+- url: /clearviewcount
+  schedule: every 1 hours
