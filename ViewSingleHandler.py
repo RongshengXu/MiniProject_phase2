@@ -19,38 +19,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 NUM_PICTURE_PER_STREAM = 3
 
-UPLOAD_ENTRY_TEMPLATE = """\
-<form action="/upload" method="post" enctype="multipart/form-data">
-    Upload File:
-    <input type="file"  name="file" >
-    <br>
-    <input type="submit" name="submit" value="Submit">
-</form>
-"""
-
-SUBSCRIBE_ENTRY_TEMPLATE = """\
-<form action="%s" method="post">
-    <input type="submit" value="Subscribe">
-</form>
-"""
-
-UNSUBSCRIBE_ENTRY_TEMPLATE = """\
-<form action="%s" method="post">
-    <input type="submit" value="Unsubscribe">
-</form>
-"""
-
-MORE_ENTRY_TEMPLATE = """\
-<form action="%s" ,method="post">
-    <input type="submit" value="More Pictures">
-</form>
-<hr>
-"""
-
-PICTURE_ENTRY_TEMPLATE = """\
-<td><img src="pic?pic_id=%s"></img></td>
-"""
-
 index = 0
 
 class ViewSingle(webapp2.RequestHandler):
@@ -166,9 +134,7 @@ class clearViewCount(webapp2.RequestHandler):
 class Subscirbe(webapp2.RequestHandler):
     def post(self):
         returnURL = self.request.headers['Referer']
-        self.response.write(self.request.url)
         stream_name = re.findall("subscribe%3D(.*)",self.request.url)[0]
-        self.response.write(stream_name)
         stream_query = StreamModel.query(StreamModel.name==stream_name).fetch()
         if len(stream_query)>0:
             stream = stream_query[0]
@@ -179,9 +145,7 @@ class Subscirbe(webapp2.RequestHandler):
 class UnsubscribeSingle(webapp2.RequestHandler):
     def post(self):
         returnURL = self.request.headers['Referer']
-        self.response.write(self.request.url)
         stream_name = re.findall("unsubscribesingle%3D(.*)",self.request.url)[0]
-        self.response.write(stream_name)
         stream_query = StreamModel.query(StreamModel.name==stream_name).fetch()
         if len(stream_query)>0:
             stream = stream_query[0]

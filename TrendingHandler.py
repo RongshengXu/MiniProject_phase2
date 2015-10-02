@@ -17,10 +17,6 @@ SERVICE_DOMAIN="sacred-highway-108321"
 MAILBOX=".appspotmail.com"
 EMAIL_SENDER="Connexus"
 
-TRENDING_PAGE_TEMPLATE = """\
-
-"""
-
 freq_dict = {0: 'No reports', 1:'Every 5 minutes', 12:'Every 1 hour', 288:'Every day'}
 
 DEFAULT_TRENDING_MESSAGE = "Trending update"
