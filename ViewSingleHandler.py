@@ -35,7 +35,7 @@ class ViewSingle(webapp2.RequestHandler):
 
         #picture_query = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1 ORDER BY uploadDate DESC",
                                   #db.Key.from_path('StreamModel', stream_name))
-        picture_query = PictureModel.query(PictureModel.stream == stream_name).fetch()
+        picture_query = PictureModel.query(PictureModel.stream == stream_name).order(-PictureModel.uploadDate).fetch()
 
         global index
 
