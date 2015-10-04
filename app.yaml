@@ -73,7 +73,7 @@ handlers:
   script: ViewSingleHandler.app
   login: required
 
-- url: /pic.*
+- url: /view_picture/([^/]+)?
   script: ViewSingleHandler.app
   login: required
 

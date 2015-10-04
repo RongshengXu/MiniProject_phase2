@@ -33,19 +33,19 @@
         {% for picture in picture_info %}
             {% if picture[0]< picture_per_stream %}
                 <td>
-                    <img src="pic?pic_id={{picture[2]}}">
+                    <img src=/view_picture/{{picture[2]}} height="300" width="300">
                     </img>
                 </td>
             {% endif %}
         {% endfor %}
         </tr>
     </table>
-    <form action={{more_pictureURL}} ,method="post">
+    <form action={{more_pictureURL}} method="post">
         <input type="submit" value="More Pictures">
     </form>
     <hr>
     {% if stream.author == user %}
-        <form action="/upload" method="post" enctype="multipart/form-data">
+        <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
             Upload File:
             <input type="file"  name="file" >
             <br>
