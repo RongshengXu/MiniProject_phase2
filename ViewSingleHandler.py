@@ -24,60 +24,70 @@ NUM_PICTURE_PER_STREAM = 3
 
 index = 0
 
+class RoutingError(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/routingerror.html')
+        self.response.write(template.render())
+
 class ViewSingle(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
         stream_name = re.findall('%3D(.*)', self.request.url)[0]
+        if (stream_name == ""):
+            self.redirect('/routingerror')
         template = JINJA_ENVIRONMENT.get_template('templates/viewsingle.html')
 
-        stream_query = StreamModel.query(StreamModel.name==stream_name)
-        stream = stream_query.fetch()[0]
-
-        #picture_query = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1 ORDER BY uploadDate DESC",
-                                  #db.Key.from_path('StreamModel', stream_name))
-        picture_query = PictureModel.query(PictureModel.stream == stream_name).order(-PictureModel.uploadDate).fetch()
-
-        global index
-
-        showNum = 0
-
-        picture_info = []
-        upload_url = blobstore.create_upload_url('/upload')
-        for picture in picture_query[index:stream.totalPicture]:
-            if (showNum < NUM_PICTURE_PER_STREAM):
-                picture_info.append((showNum, picture.id, picture.blob_key))
-                showNum += 1
-
-        morePictureURL = urllib.urlencode({'showmore':stream_name+"=="+str(index)})
-        countView_query = CountViewModel.query(CountViewModel.name==stream_name).fetch()
-
-        if user.nickname() in stream.subscribers:
-            url = urllib.urlencode({'unsubscribesingle':stream_name})
+        stream_query = StreamModel.query(StreamModel.name==stream_name).fetch()
+        if (len(stream_query) == 0):
+            self.redirect('/routingerror')
         else:
-            url = urllib.urlencode({'subscribe':stream_name})
-        if (stream.author == user):
-            pass
-        else:
-            #if len(countView_query)>0:
-            if View.more == True:
-                countView = countView_query[0]
-                countView.count = countView.count + 1
-                countView.total = countView.total + 1
-                countView.put()
-            View.more = False
+            stream = stream_query[0]
 
-        template_values = {
-            'user': user,
-            'stream_name': stream_name,
-            'stream': stream,
-            'picture_info': picture_info,
-            'upload_url': upload_url,
-            'picture_per_stream': NUM_PICTURE_PER_STREAM,
-            'more_pictureURL': morePictureURL,
-            'countView_query': countView_query,
-            'url': url
-        }
-        self.response.write(template.render(template_values))
+            #picture_query = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1 ORDER BY uploadDate DESC",
+                                      #db.Key.from_path('StreamModel', stream_name))
+            picture_query = PictureModel.query(PictureModel.stream == stream_name).order(-PictureModel.uploadDate).fetch()
+
+            global index
+
+            showNum = 0
+
+            picture_info = []
+            upload_url = blobstore.create_upload_url('/upload')
+            for picture in picture_query[index:stream.totalPicture]:
+                if (showNum < NUM_PICTURE_PER_STREAM):
+                    picture_info.append((showNum, picture.id, picture.blob_key))
+                    showNum += 1
+
+            morePictureURL = urllib.urlencode({'showmore':stream_name+"=="+str(index)})
+            countView_query = CountViewModel.query(CountViewModel.name==stream_name).fetch()
+
+            if user.nickname() in stream.subscribers:
+                url = urllib.urlencode({'unsubscribesingle':stream_name})
+            else:
+                url = urllib.urlencode({'subscribe':stream_name})
+            if (stream.author == user):
+                pass
+            else:
+                #if len(countView_query)>0:
+                if View.more == True:
+                    countView = countView_query[0]
+                    countView.count = countView.count + 1
+                    countView.total = countView.total + 1
+                    countView.put()
+                View.more = False
+
+            template_values = {
+                'user': user,
+                'stream_name': stream_name,
+                'stream': stream,
+                'picture_info': picture_info,
+                'upload_url': upload_url,
+                'picture_per_stream': NUM_PICTURE_PER_STREAM,
+                'more_pictureURL': morePictureURL,
+                'countView_query': countView_query,
+                'url': url
+            }
+            self.response.write(template.render(template_values))
 
 
 
@@ -162,5 +172,6 @@ app = webapp2.WSGIApplication([
     ('/view_picture/([^/]+)?', ViewPictureHandler),
     ('/subscribe.*', Subscirbe),
     ('/clearviewcount', clearViewCount),
-    ('/unsubscribesingle.*', UnsubscribeSingle)
+    ('/unsubscribesingle.*', UnsubscribeSingle),
+    ('/routingerror', RoutingError)
 ], debug=True)

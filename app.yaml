@@ -57,6 +57,9 @@ handlers:
   script: SearchHandler.app
   login: required
 
+- url: /routingerror
+  script: ViewSingleHandler.app
+
 - url: /clearviewcount
   script: ViewSingleHandler.app
   #login: admin
