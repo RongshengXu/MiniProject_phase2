@@ -5,6 +5,9 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /assets/css
+  static_dir: assets/css
+
 - url: /social
   script: SocialHandler.app
   login: required
