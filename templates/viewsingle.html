@@ -25,9 +25,7 @@
         <tr>
         The total number of picture is {{stream.totalPicture}}:
         {% for picture in picture_info %}
-            {% if picture[0] < picture_per_stream %}
                 {{picture[1]}}
-            {% endif %}
         {% endfor %}
           showed below
         {% for picture in picture_info %}
