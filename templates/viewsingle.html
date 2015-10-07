@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 {% autoescape true %}
 <html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/common-style.css" />
+    <script></script>
+</head>
 <body>
-    <h1>Connex.us</h1>
-    <table cellspacing="15">
-        <tr>
-            <td><a href="manage">Manage</a></td>
-            <th>|</th>
-            <td><a href="create">Create</a></td>
-            <th>|</th>
-            <td style="background-color:gray"><a href="view">View</a></td>
-            <th>|</th>
-            <td><a href="search">Search</a></td>
-            <th>|</th>
-            <td><a href="trending">Trending</a></td>
-            <th>|</th>
-            <td><a href="social">Social</a></td>
-        </tr>
-    </table>
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <div class="navbar-header">
+                <p class="navbar-brand">Connex.us</p>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a href="manage">Manage</a></li>
+                    <li><a href="create">Create</a></li>
+                    <li class="active"><a href="view">View</a></li>
+                    <li><a href="search">Search</a></li>
+                    <li><a href="trending">Trending</a></li>
+                    <li><a href="social">Social</a></li>
+                    <li><a href={{url}}>{{url_linktext}}</a><li></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
     <hr size="5" />
     <h3>View A Single stream</h3>
     <h3>{{stream_name}}</h3>

@@ -10,26 +10,23 @@
 </head>
 <body>
     <div class="container">
-        <h1>Connex.us</h1>
-        <table cellspacing="15">
-            <tr>
-                <td style="background-color:gray"><a href="manage">Manage</a></td>
-                <th>|</th>
-                <td><a href="create">Create</a></td>
-                <th>|</th>
-                <td><a href="view">View</a></td>
-                <th>|</th>
-                <td><a href="search">Search</a></td>
-                <th>|</th>
-                <td><a href="trending">Trending</a></td>
-                <th>|</th>
-                <td><a href="social">Social</a></td>
-                <th>|</th>
-                <td><a href={{url}}>{{url_linktext}}</a><td>
-            </tr>
-        </table>
+        <nav class="navbar navbar-default">
+            <div class="navbar-header">
+                <p class="navbar-brand">Connex.us</p>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="manage">Manage</a></li>
+                    <li><a href="create">Create</a></li>
+                    <li><a href="view">View</a></li>
+                    <li><a href="search">Search</a></li>
+                    <li><a href="trending">Trending</a></li>
+                    <li><a href="social">Social</a></li>
+                    <li><a href={{url}}>{{url_linktext}}</a><li></li>
+                </ul>
+            </div>
+        </nav>
     </div>
-    <hr size="5" />
 
     <div class="container">
         <div class="panel panel-default">
