@@ -15,7 +15,7 @@ class LoginPage(webapp2.RequestHandler):
             self.redirect('/manage')
         else:
             url = users.create_login_url(self.request.url)
-            url_linktext = 'Login'
+            url_linktext = 'Sign in with Google'
             template_values = {
                 'url' : url,
                 'url_linktext': url_linktext

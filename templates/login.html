@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 {% autoescape true %}
 <html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/common-style.css" />
+    <script></script>
+</head>
     <body>
-        <h1>Welcome to Connexus!</h1>
-        <h3>Share the world!</h3>
-        <a href={{url}}>{{url_linktext}}</a>
+        <div class="container">
+            <div class="panel panel-success">
+                <div class="panel-heading"><b>Login Page</b></div>
+                <div class="panel-body">
+                    <div><h1>Welcome to Connexus!</h1></div>
+                    <h4 class="col-md-12 text-right">Share the world using pictures!</h4>
+                    <div class="col-md-12 gap_middle"></div>
+                    <div>
+                        <p class="col-md-12">Google accounts:</p>
+                        <div class="col-md-12 gap_small"></div>
+                        <a href="{{url}}" class="btn btn-info">
+                            {{url_linktext}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
 {% endautoescape %}
