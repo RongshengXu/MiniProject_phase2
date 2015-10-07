@@ -27,38 +27,37 @@
             </div>
         </nav>
     </div>
-    <hr size="5" />
-    <br>
 
-    <form action="/sign" method="post">
-        <table>
-            <tr>
-                <td><textarea name="streamname" rows="3" cols="60" placeholder = "Big news"></textarea></td>
-                <td><textarea name="streamtags" rows="3" cols="60" placeholder = "#UTexas, #Too young too simple, #Naive"></textarea></td>
-            </tr>
-            <tr>
-                <td align="center" valign="top"><b><big>Name Your Stream</big></b></td>
-                <td align="center" valign="top"><b><big>Tag Your Stream</big></b></td>
-            </tr>
-        </table>
-        <br>
-        <br>
-        <br>
-        <table>
-            <tr>
-                <td><textarea name="subscribers" rows="3" cols="60" placeholder = "Input subscribers' emails"></textarea></td>
-                <td><textarea name="url" rows="3" cols="60" placeholder = "cover page URL"></textarea></td>
-            </tr>
-            <tr>
-                <td><textarea name="context" rows="3" cols="60" placeholder="Option message for invite" ></textarea></td>
-                <td align="center" valign="top" ><b><big>URL to to Cover Image</big></b></td>
-            </tr>
-            <tr>
-                <td align="center" valign="top"><b><big>Add Subscribers</big></b></td>
-            </tr>
-        </table>
-        <input type="submit" value="Create Stream">
-    </form>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Create a Stream</div>
+            <div class="panel-body">
+                <form action="/sign" method="post">
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" name="streamname" placeholder = "Big news"/>
+                        <b>Name Your Stream</b>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <textarea class="form-control" name="streamtags" placeholder = "#UTexas, #Too young too simple, #Naive"></textarea>
+                        <b>Tag Your Stream (comma separated)</b>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <textarea class="form-control" name="subscribers" placeholder = "Input subscribers' emails"></textarea>
+                        <div class="gap_small"></div>
+                        <textarea class="form-control" name="context" rows="3" cols="60" placeholder="Option message for invite" ></textarea>
+                        <b>Add Subscribers</b>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" name="url" placeholder = "cover page URL"/>
+                        <b>URL to Cover Image (optional)</b>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="submit" class="btn btn-primary" value="Create Stream"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 {% endautoescape %}
