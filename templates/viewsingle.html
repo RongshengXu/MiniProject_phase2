@@ -27,48 +27,78 @@
             </div>
         </nav>
     </div>
+    <!--
     <hr size="5" />
     <h3>View A Single stream</h3>
-    <h3>{{stream_name}}</h3>
-    <table style="width:100%">
-        <tr>
-        The total number of picture is {{stream.totalPicture}}:
-        {% for picture in picture_info %}
-                {{picture[1]}}
-        {% endfor %}
-          showed below
-        {% for picture in picture_info %}
-            {% if picture[0]< picture_per_stream %}
-                <td>
-                    <img src=/view_picture/{{picture[2]}} height="300" width="300">
-                    </img>
-                </td>
-            {% endif %}
-        {% endfor %}
-        </tr>
-    </table>
-    <form action={{more_pictureURL}} method="post">
-        <input type="submit" value="More Pictures">
-    </form>
-    <hr>
-    {% if stream.author == user %}
-        <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
-            Upload File:
-            <input type="file"  name="file" >
-            <br>
-            <input type="submit" name="submit" value="Submit">
-        </form>
-    {% else %}
-        {% if user.nickname() in stream.subscribers%}
-            <form action="{{url}}" method="post">
-                <input type="submit" value="Unsubscribe">
-            </form>
+    -->
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div>
+                    <strong>{{stream_name}}</strong>
+                </div>
+                <div style="text-align: right">
+                    <small>
+                        The total number of picture is {{stream.totalPicture}}:
+                        {% for picture in picture_info %}
+                                {{picture[1]}}
+                        {% endfor %}
+                          showed below
+                    </small>
+                </div>
+            </div>
+            <div class="panel-body">
+                {% for picture in picture_info %}
+                    {% if picture[0]< picture_per_stream %}
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <!--<div class="thumbnail clickable">-->
+                                <img src="/view_picture/{{picture[2]}}" class="img-responsive img-rounded single_pic"/>
+                            <!--</div>-->
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="col-md-12 col-sm-12 col-xs-12 gap_small"></div>
+                <div class="col-md-12 col-sm-12 col-xs-12 text-right">
+                    <form action={{more_pictureURL}} method="post">
+                        <input type="submit" class="button button-pill" value="More Pictures">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% if stream.author == user %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Upload pictures to <strong>{{stream.name}}</strong></div>
+                <div class="panel-body">
+                    <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <input type="file" class="btn btn-success" name="file">
+                                <input type="submit" class="btn btn-primary" name="submit" value="Submit">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         {% else %}
-            <form action={{url}} method="post">
-                <input type="submit" value="Subscribe">
-            </form>
+            <div class="panel panel-default">
+                <div class="panel-heading">Subscribe to <strong>{{stream.name}}</strong></div>
+                <div class="panel-body">
+                    {% if user.nickname() in stream.subscribers%}
+                        <form action="{{url}}" method="post">
+                            <input type="submit" class="btn btn-warning" value="Unsubscribe">
+                        </form>
+                    {% else %}
+                        <form action={{url}} method="post">
+                            <input type="submit" class="btn btn-info" value="Subscribe">
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
         {% endif %}
-    {% endif %}
+    </div>
 </body>
 </html>
 {% endautoescape %}

@@ -27,31 +27,36 @@
             </div>
         </nav>
     </div>
-    <hr size="5" />
-    <h3>View All Streams</h3>
-    <table border="0" style="width:100%">
-        {% if stream_query_len > 0%}
-            {% for item in index_info %}
-                {% if item[3] == 0 %}
-                    <tr>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">View All Streams</div>
+            <div class="panel-body">
+                {% if stream_query_len > 0%}
+                    {% for item in index_info %}
+                            <a href="{{item[2]}}">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <img src="{{item[1]}}" class="img-responsive img-rounded displayed"/>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div style="text-align: center" class="list-group-item-heading">
+                                                <b>{{item[0]}}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center" class="list-group-item-heading">
+                        <p>No streams are available</p>
+                    </div>
                 {% endif %}
-                <td>
-                    <a href="{{item[2]}}">
-                        <div style = "position:relative;">
-                            <img src="{{item[1]}}" height="150" width="150">
-                            </img>
-                            <div style = "position: relative; left:65px; top:0px">{{item[0]}}</div>
-                        </div>
-                    </a>
-                </td>
-                {% if item[3] == 3 %}
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <tr><td>No streams are available</td></tr>
-        {% endif %}
-    </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 {% endautoescape %}
