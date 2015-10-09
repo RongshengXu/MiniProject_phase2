@@ -171,7 +171,7 @@ class UploadHandler(webapp2.RequestHandler):
         if 'application/json' in self.request.headers.get('Accept'):
             self.response.headers['Content-Type'] = 'application/json'
         self.response.write(s)
-        self.redirect(returnURL)
+        #self.redirect(returnURL)
 
 app = webapp2.WSGIApplication(
     [
