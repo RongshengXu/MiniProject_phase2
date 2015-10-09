@@ -10,8 +10,10 @@ __author__ = 'rongshengxu'
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/MIT
 #
-
+from google.appengine.ext import ndb, db
+from google.appengine.ext import blobstore, deferred
 from google.appengine.api import memcache, images
+from Stream import StreamModel, PictureModel
 import json
 import os
 import re
@@ -52,7 +54,19 @@ class CORSHandler(webapp2.RequestHandler):
     def options(self, *args, **kwargs):
         pass
 
-class UploadHandler(CORSHandler):
+class UploadHandler(webapp2.RequestHandler):
+
+    def initialize(self, request, response):
+        super(UploadHandler, self).initialize(request, response)
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers['Access-Control-Allow-Methods'] =\
+            'OPTIONS, HEAD, GET, POST, DELETE'
+        self.response.headers['Access-Control-Allow-Headers'] =\
+            'Content-Type, Content-Range, Content-Disposition'
+
+    def json_stringify(self, obj):
+        return json.dumps(obj, separators=(',', ':'))
+
     def validate(self, file):
         if file['size'] < MIN_FILE_SIZE:
             file['error'] = 'File is too small'
@@ -64,19 +78,19 @@ class UploadHandler(CORSHandler):
             return True
         return False
 
-    def validate_redirect(self, redirect):
-        if redirect:
-            if REDIRECT_ALLOW_TARGET:
-                return REDIRECT_ALLOW_TARGET.match(redirect)
-            referer = self.request.headers['referer']
-            if referer:
-                from urlparse import urlparse
-                parts = urlparse(referer)
-                redirect_allow_target = '^' + re.escape(
-                    parts.scheme + '://' + parts.netloc + '/'
-                )
-            return re.match(redirect_allow_target, redirect)
-        return False
+    # def validate_redirect(self, redirect):
+    #     if redirect:
+    #         if REDIRECT_ALLOW_TARGET:
+    #             return REDIRECT_ALLOW_TARGET.match(redirect)
+    #         referer = self.request.headers['referer']
+    #         if referer:
+    #             from urlparse import urlparse
+    #             parts = urlparse(referer)
+    #             redirect_allow_target = '^' + re.escape(
+    #                 parts.scheme + '://' + parts.netloc + '/'
+    #             )
+    #         return re.match(redirect_allow_target, redirect)
+    #     return False
 
     def get_file_size(self, file):
         file.seek(0, 2)  # Seek to the end of the file
@@ -84,119 +98,84 @@ class UploadHandler(CORSHandler):
         file.seek(0)  # Reset the file position to the beginning
         return size
 
-    def write_blob(self, data, info):
-        key = urllib.quote(info['type'].encode('utf-8'), '') +\
-            '/' + str(hash(data)) +\
-            '/' + urllib.quote(info['name'].encode('utf-8'), '')
-        try:
-            memcache.set(key, data, time=EXPIRATION_TIME)
-        except: #Failed to add to memcache
-            return (None, None)
-        thumbnail_key = None
-        if IMAGE_TYPES.match(info['type']):
-            try:
-                img = images.Image(image_data=data)
-                img.resize(
-                    width=THUMB_MAX_WIDTH,
-                    height=THUMB_MAX_HEIGHT
-                )
-                thumbnail_data = img.execute_transforms()
-                thumbnail_key = key + THUMB_SUFFIX
-                memcache.set(
-                    thumbnail_key,
-                    thumbnail_data,
-                    time=EXPIRATION_TIME
-                )
-            except: #Failed to resize Image or add to memcache
-                thumbnail_key = None
-        return (key, thumbnail_key)
+    # def write_blob(self, data, info):
+    #     key = urllib.quote(info['type'].encode('utf-8'), '') +\
+    #         '/' + str(hash(data)) +\
+    #         '/' + urllib.quote(info['name'].encode('utf-8'), '')
+    #     try:
+    #         user_picture = PictureModel(parent = db.Key.from_path('StreamModel', stream_name))
+    #         user_picture.id = str(stream.totalPicture)
+    #         picture = images.resize(picture, 320, 400)
+    #         user_picture.picture = db.Blob(picture)
+    #         #memcache.set(key, data, time=EXPIRATION_TIME)
+    #     except: #Failed to add to memcache
+    #         return (None, None)
+    #     thumbnail_key = None
+    #     if IMAGE_TYPES.match(info['type']):
+    #         try:
+    #             img = images.Image(image_data=data)
+    #             img.resize(
+    #                 width=THUMB_MAX_WIDTH,
+    #                 height=THUMB_MAX_HEIGHT
+    #             )
+    #             thumbnail_data = img.execute_transforms()
+    #             thumbnail_key = key + THUMB_SUFFIX
+    #             memcache.set(
+    #                 thumbnail_key,
+    #                 thumbnail_data,
+    #                 time=EXPIRATION_TIME
+    #             )
+    #         except: #Failed to resize Image or add to memcache
+    #             thumbnail_key = None
+    #     return (key, thumbnail_key)
 
-    def handle_upload(self):
+    def handle_upload(self, stream_name):
         results = []
+        stream_query = StreamModel.query(StreamModel.name==stream_name)
+        stream = stream_query.fetch()[0]
         for name, fieldStorage in self.request.POST.items():
             if type(fieldStorage) is unicode:
                 continue
             result = {}
-            result['name'] = urllib.unquote(fieldStorage.filename)
+            result['name'] = re.sub(
+                r'^.*\\',
+                '',
+                fieldStorage.filename)
             result['type'] = fieldStorage.type
             result['size'] = self.get_file_size(fieldStorage.file)
             if self.validate(result):
-                key, thumbnail_key = self.write_blob(
-                    fieldStorage.value,
-                    result
-                )
-                if key is not None:
-                    result['url'] = self.request.host_url + '/' + key
-                    result['deleteUrl'] = result['url']
-                    result['deleteType'] = 'DELETE'
-                    if thumbnail_key is not None:
-                        result['thumbnailUrl'] = self.request.host_url +\
-                             '/' + thumbnail_key
-                else:
-                    result['error'] = 'Failed to store uploaded file.'
+                picture = fieldStorage.value
+                # key = self.write_blob(
+                #     picture, result
+                # )
+                # if key is not None:
+                stream.totalPicture = stream.totalPicture + 1
+                user_picture = PictureModel(parent = db.Key.from_path('StreamModel', stream_name))
+                user_picture.id = str(stream.totalPicture)
+                picture = images.resize(picture, 320, 400)
+                user_picture.picture = db.Blob(picture)
+                stream.lastUpdated = user_picture.uploadDate
+                user_picture.put()
             results.append(result)
+        stream.put()
         return results
 
-    def head(self):
-        pass
-
     def post(self):
-        if (self.request.get('_method') == 'DELETE'):
-            return self.delete()
-        result = {'files': self.handle_upload()}
+        returnURL = self.request.headers['Referer']
+        stream_name = re.findall('=(.*)', returnURL)[0]
+        # if (self.request.get('_method') == 'DELETE'):
+        #     return self.delete()
+        results = self.handle_upload(stream_name)
+        result = {'files': results}
         s = self.json_stringify(result)
-        redirect = self.request.get('redirect')
-        if self.validate_redirect(redirect):
-            return self.redirect(str(
-                redirect.replace('%s', urllib.quote(s, ''), 1)
-            ))
         if 'application/json' in self.request.headers.get('Accept'):
             self.response.headers['Content-Type'] = 'application/json'
         self.response.write(s)
-
-class FileHandler(CORSHandler):
-    def normalize(self, str):
-        return urllib.quote(urllib.unquote(str), '')
-
-    def get(self, content_type, data_hash, file_name):
-        content_type = self.normalize(content_type)
-        file_name = self.normalize(file_name)
-        key = content_type + '/' + data_hash + '/' + file_name
-        data = memcache.get(key)
-        if data is None:
-            return self.error(404)
-        # Prevent browsers from MIME-sniffing the content-type:
-        self.response.headers['X-Content-Type-Options'] = 'nosniff'
-        content_type = urllib.unquote(content_type)
-        if not IMAGE_TYPES.match(content_type):
-            # Force a download dialog for non-image types:
-            content_type = 'application/octet-stream'
-        elif file_name.endswith(THUMB_SUFFIX):
-            content_type = 'image/png'
-        self.response.headers['Content-Type'] = content_type
-        # Cache for the expiration time:
-        self.response.headers['Cache-Control'] = 'public,max-age=%d' \
-            % EXPIRATION_TIME
-        self.response.write(data)
-
-    def delete(self, content_type, data_hash, file_name):
-        content_type = self.normalize(content_type)
-        file_name = self.normalize(file_name)
-        key = content_type + '/' + data_hash + '/' + file_name
-        result = {key: memcache.delete(key)}
-        content_type = urllib.unquote(content_type)
-        if IMAGE_TYPES.match(content_type):
-            thumbnail_key = key + THUMB_SUFFIX
-            result[thumbnail_key] = memcache.delete(thumbnail_key)
-        if 'application/json' in self.request.headers.get('Accept'):
-            self.response.headers['Content-Type'] = 'application/json'
-        s = self.json_stringify(result)
-        self.response.write(s)
+        self.redirect(returnURL)
 
 app = webapp2.WSGIApplication(
     [
-        ('/upload', UploadHandler),
-        ('/(.+)/([^/]+)/([^/]+)', FileHandler)
+        ('/upload', UploadHandler)
     ],
     debug=True
 )

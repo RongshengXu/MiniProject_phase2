@@ -11,6 +11,12 @@ handlers:
 - url: /assets/js
   static_dir: assets/js
 
+- url: /assets/fonts
+  static_dir: assets/fonts
+
+- url: /server
+  static_dir: server
+
 - url: /social
   script: SocialHandler.app
   login: required
@@ -90,7 +96,7 @@ handlers:
   login: required
 
 - url: /upload
-  script: ViewSingleHandler.app
+  script: upload_server.app
   login: required
 
 - url: /stream.*
