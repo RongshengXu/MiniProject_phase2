@@ -47,35 +47,21 @@ class SearchResult(webapp2.RequestHandler):
         }
         self.response.write(template.render(template_values))
 
-class AutoAPI(webapp2.ResponseHeaders):
-    def get(self):
-        patten = self.request.get("term")
-        print patten
-        all_streams = StreamModel.query().fetch()
-        ret_tags = []
-        if patten:
-            for stream in all_streams:
-                if patten in stream.tags:
-                    ret_tags.append(stream.name)
+class AutoAPI(webapp2.RequestHandler):
+     def get(self):
+        streams = StreamModel.query().fetch()
+        namelist = list()
+        for stream in streams:
+            namelist.append(stream.name)
+            for tag in stream.tag:
+                namelist.append(tag)
 
-        ret_tags.sort()
+        namelist.sort()
+        list_json = {"namelist": namelist}
 
-        if len(ret_tags) == 0:
-            ready = False
-        else:
-            ready = True
-        context = {"ready": ready, "tags": ret_tags}
-        self.response.write(json.dumps(context))
-
-        # streams = StreamModel.query().fetch()
-        # namelist = list()
-        # for stream in streams:
-        #     namelist.append(stream.name)
-        # list_json = {"namelist": namelist}
-        #
-        # self.response.headers['Content-Type'] = 'application/json'
-        # list_json = json.dumps(list_json)
-        # self.response.write(list_json)
+        self.response.headers['Content-Type'] = 'application/json'
+        list_json = json.dumps(list_json)
+        self.response.write(list_json)
 
 
 app = webapp2.WSGIApplication([
