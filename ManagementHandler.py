@@ -58,15 +58,15 @@ class deleteStream(webapp2.RequestHandler):
             ndb.delete_multi(ndb.put_multi(countViews))
             stream_query = StreamModel.query(StreamModel.name.IN(streams), StreamModel.author==users.get_current_user())
             streams = stream_query.fetch()
-            # for stream in streams:
-            #     pictures = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1", db.Key.from_path('StreamModle',stream.name))
-            #     db.delete(pictures)
             for stream in streams:
-                pictures = PictureModel.query(PictureModel.stream == stream.name).fetch()
-                if len(pictures)>0:
-                    for picture in pictures:
-                        blobstore.delete(picture.blob_key)
-                        picture.key.delete()
+                 pictures = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1", db.Key.from_path('StreamModle',stream.name))
+                 db.delete(pictures)
+            # for stream in streams:
+            #     pictures = PictureModel.query(PictureModel.stream == stream.name).fetch()
+            #     if len(pictures)>0:
+            #         for picture in pictures:
+            #             blobstore.delete(picture.blob_key)
+            #             picture.key.delete()
             ndb.delete_multi(ndb.put_multi(streams))
         #self.response.write("delete")
         self.redirect(returnURL)

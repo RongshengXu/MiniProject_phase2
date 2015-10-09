@@ -8,6 +8,9 @@ handlers:
 - url: /assets/css
   static_dir: assets/css
 
+- url: /assets/js
+  static_dir: assets/js
+
 - url: /social
   script: SocialHandler.app
   login: required
@@ -79,7 +82,10 @@ handlers:
   script: ViewSingleHandler.app
   login: required
 
-- url: /view_picture/([^/]+)?
+#- url: /view_picture/([^/]+)?
+#  script: ViewSingleHandler.app
+#  login: required
+- url: /pic.*
   script: ViewSingleHandler.app
   login: required
 

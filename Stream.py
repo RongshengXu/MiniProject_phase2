@@ -31,11 +31,19 @@ class CountViewModel(ndb.Model):
     count = ndb.IntegerProperty()
     total = ndb.IntegerProperty()
 
-class PictureModel(ndb.Model):
+# class PictureModel(ndb.Model):
+#     """ picture model
+#     """
+#
+#     stream = ndb.StringProperty()
+#     id = ndb.StringProperty()
+#     blob_key = ndb.BlobKeyProperty()
+#     uploadDate = ndb.DateTimeProperty(auto_now_add=True)
+
+class PictureModel(db.Model):
     """ picture model
     """
-    #picture = ndb.BlobProperty()
-    stream = ndb.StringProperty()
-    id = ndb.StringProperty()
-    blob_key = ndb.BlobKeyProperty()
-    uploadDate = ndb.DateTimeProperty(auto_now_add=True)
+    picture = db.BlobProperty()
+    #stream = db.StringProperty()
+    id = db.StringProperty()
+    uploadDate = db.DateTimeProperty(auto_now_add=True)
