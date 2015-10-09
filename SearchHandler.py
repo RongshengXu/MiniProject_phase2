@@ -46,7 +46,16 @@ class SearchResult(webapp2.RequestHandler):
         }
         self.response.write(template.render(template_values))
 
+class AutoApi(webapp2.ResponseHeaders):
+    def post(self):
+        streams = StreamModel.query().fetch()
+        namelist = list()
+        for stream in streams:
+            namelist.append(stream.name)
+
+
 app = webapp2.WSGIApplication([
     ('/search', Search),
-    ('/searchresult', SearchResult)
+    ('/searchresult', SearchResult),
+    ('/autoapi', AutoApi),
 ], debug=True)
