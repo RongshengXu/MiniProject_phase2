@@ -15,10 +15,10 @@ $(function () {
     'use strict';
 
     // Initialize the jQuery File Upload widget:
-    $('#file:').fileupload({
+    $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: 'upload'
+        url: 'server/php/'
     });
 
     // Enable iframe cross-domain access via redirect option:
