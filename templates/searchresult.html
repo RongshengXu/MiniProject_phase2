@@ -27,30 +27,41 @@
             </div>
         </nav>
     </div>
-    <hr size="5" />
-    <h3>Search Streams</h3>
-    <form action="/searchresult" method="get">
-        <input type="search" name="searchPattern" placeholder="I'm lucky"><br>
-        <input type="submit" value="Search">
-    </form>
-    {% for info in infos %}
-        {% if info[3] == 0 %}
-        <tr>
-        {% endif %}
-        <td>
-            <a href="{{info[2]}}">
-                <div style = "position:relative;">
-                    <img src="{{info[1]}}" height="100" width="100"></img>
-                    <div style = "position: relative; left:0px; top:0px">
-                        {{info[0]}}
-                    </div>
-                </div>
-            </a>
-        </td>
-        {% if info[3]==3 %}
-        </tr>
-        {% endif %}
-    {% endfor %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Search Streams</div>
+            <div class="panel-body">
+                <label>Search keywords</label>
+                <form action="/searchresult" method="get">
+                    <input type="search" class="form-control" name="searchPattern" placeholder="I'm lucky"><br>
+                    <input type="submit" class="btn btn-info" value="Search">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Search Results</div>
+            <div class="panel-body">
+                {% for info in infos %}
+                    <a href="{{info[2]}}">
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <img src="{{info[1]}}" class="img-responsive img-rounded displayed"/>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <div style="text-align: center" class="list-group-item-heading">
+                                            <b>{{info[0]}}</b>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 {% endautoescape %}

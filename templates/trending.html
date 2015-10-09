@@ -27,32 +27,58 @@
             </div>
         </nav>
     </div>
-    <hr size="5" />
-    <h3>Top 3 Trending Streams</h3>
-    <table border="0" style="width:100%">
-        {% for info in infos %}
-            <td>
-                <div style = "position:relative;">
-                    <a href="{{info[2]}}">
-                        <img src="{{info[1]}}" height="150" width="150"></img>
-                        <div style = "position: relative; left:65px; top:0px">{{info[0]}}</div>
-                    </a>
-                    <div style = "position: relative; left:10px; top:5px">{{info[3]}} views in past hour</div>
+
+    <div class="container">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">Top 3 Trending Streams--{{freq}}</div>
+                <div class="panel-body">
+                    {% for info in infos %}
+                        <div style = "position:relative;">
+                            <a href="{{info[2]}}">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <img src="{{info[1]}}" class="img-responsive img-rounded displayed"/>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div style="text-align: center" class="list-group-item-heading">
+                                                <b>{{info[0]}}</b>
+                                            </div>
+                                            <div style="text-align: center; color: black">
+                                                <small>{{info[3]}} views in past hour</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
                 </div>
-            </td>
-        {% endfor %}
-    </table>
-    <hr>
-    <h3>Email trending report</h3>
-    <form action="/update" method="post">
-        <input type="radio" name="frequency" value="No reports" checked>No reports</input><br>
-        <input type="radio" name="frequency" value="Every 5 minutes">Every 5 minutes</input><br>
-        <input type="radio" name="frequency" value="Every 1 hour">Every 1 hour</input><br>
-        <input type="radio" name="frequency" value="Every day">Every day</input><br>
-        <input type="submit" value="Update rate">
-    </form>
-    <hr>
-    Present frequency: {{freq}}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div>Manage Report</div>
+                </div>
+                <div class="panel-body">
+                    <form class="radio" action="/update" method="post">
+                        <div class="radio">
+                            <input type="radio" name="frequency" value="No reports" checked>No reports</input><br>
+                            <input type="radio" name="frequency" value="Every 5 minutes">Every 5 minutes</input><br>
+                            <input type="radio" name="frequency" value="Every 1 hour">Every 1 hour</input><br>
+                            <input type="radio" name="frequency" value="Every day">Every day</input><br>
+                            <div class="gap_small"></div>
+                            <div class="text-right">
+                                <input type="submit" class="btn btn-info" value="Update rate">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 {% endautoescape %}

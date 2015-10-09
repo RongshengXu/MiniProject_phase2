@@ -50,3 +50,12 @@ img.single_pic {
     -webkit-border-radius: 50px;
     border-radius: 50px;
 }
+
+.radio, .checkbox {
+    position: relative;
+    display: block;
+    min-height: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
