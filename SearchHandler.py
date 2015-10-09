@@ -81,5 +81,5 @@ class AutoAPI(webapp2.ResponseHeaders):
 app = webapp2.WSGIApplication([
     ('/search', Search),
     ('/searchresult', SearchResult),
-    ('/autoapi', AutoAPI),
+    ('/autoapi.*', AutoAPI),
 ], debug=True)

@@ -7,8 +7,6 @@ threadsafe: true
 handlers:
 - url: /assets/css
   static_dir: assets/css
-- url: /assets/js
-  static_dir: assets/js
 
 - url: /assets/js
   static_dir: assets/js
@@ -71,7 +69,7 @@ handlers:
   script: SearchHandler.app
   login: required
 
-- url: /autoapi
+- url: /autoapi.*
   script: SearchHandler.app
   login: required
 
