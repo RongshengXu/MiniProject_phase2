@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/common-style.css" />
-    <script></script>
+    <link rel="stylesheet" href="/assets/css/jquery-ui.css" />
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/assets/js/auto-complete.js"></script>
 </head>
 <body>
     <div class="container">
@@ -33,7 +36,7 @@
             <div class="panel-body">
                 <label>Search keywords</label>
                 <form action="/searchresult" method="get">
-                    <input type="search" class="form-control" name="searchPattern" placeholder="I'm lucky"><br>
+                    <input id="autoc" type="search" class="form-control" name="searchPattern" placeholder="I'm lucky"><br>
                     <input type="submit" class="btn btn-info" value="Search">
                 </form>
             </div>
