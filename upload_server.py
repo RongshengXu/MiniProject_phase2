@@ -139,7 +139,7 @@ class UploadHandler(webapp2.RequestHandler):
         stream.lastUpdated = user_picture.uploadDate
         db.put_async(user_picture)
 
-    @ndb.transactional(retries=10)
+    @ndb.transactional(retries=20)
     def add(self, key):
         s = key.get()
         s.totalPicture = s.totalPicture + 1
