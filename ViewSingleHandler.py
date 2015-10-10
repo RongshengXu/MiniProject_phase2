@@ -53,6 +53,7 @@ class ViewSingle(webapp2.RequestHandler):
             showNum = 0
 
             picture_info = []
+            self.response.write("<br>picture_query: %s and %s </br>" % (type(picture_query), str(picture_query)))
             #upload_url = blobstore.create_upload_url('/upload')
             for picture in picture_query[index:stream.totalPicture]:
                 if (showNum < NUM_PICTURE_PER_STREAM):

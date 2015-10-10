@@ -128,7 +128,26 @@ class UploadHandler(webapp2.RequestHandler):
     #         except: #Failed to resize Image or add to memcache
     #             thumbnail_key = None
     #     return (key, thumbnail_key)
+    
+    #@db.transactional(xg=True)
+    def write_data(self, stream, stream_name, picture):
+        stream.totalPicture = stream.totalPicture + 1
+        user_picture = PictureModel(parent = db.Key.from_path('StreamModel', stream_name))
+        user_picture.id = str(stream.totalPicture)
+        picture = images.resize(picture, 320, 400)
+        user_picture.picture = db.Blob(picture)
+        stream.lastUpdated = user_picture.uploadDate
+        db.put_async(user_picture)
 
+    @ndb.transactional(retries=10)
+    def add(self, key):
+        s = key.get()
+        s.totalPicture = s.totalPicture + 1
+        num = s.totalPicture
+        s.put()
+        return num
+
+    #@ndb.transactional
     def handle_upload(self, stream_name):
         results = []
         stream_query = StreamModel.query(StreamModel.name==stream_name)
@@ -145,19 +164,20 @@ class UploadHandler(webapp2.RequestHandler):
             result['size'] = self.get_file_size(fieldStorage.file)
             if self.validate(result):
                 picture = fieldStorage.value
-                # key = self.write_blob(
-                #     picture, result
-                # )
-                # if key is not None:
-                stream.totalPicture = stream.totalPicture + 1
+                #self.write_data(stream, stream_name, picture)
+                #num = num+1
+                num = self.add(ndb.Key('StreamModel', stream.key.id()))
                 user_picture = PictureModel(parent = db.Key.from_path('StreamModel', stream_name))
-                user_picture.id = str(stream.totalPicture)
+                user_picture.id = str(num)
                 picture = images.resize(picture, 320, 400)
                 user_picture.picture = db.Blob(picture)
                 stream.lastUpdated = user_picture.uploadDate
                 user_picture.put()
+                # key = self.write_blob(
+                #     picture, result
+                # )
+                # if key is not None:
             results.append(result)
-        stream.put()
         return results
 
     def post(self):
