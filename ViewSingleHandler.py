@@ -11,6 +11,7 @@ from ViewHandler import View
 import webapp2
 import re
 import urllib
+import json
 
 import os
 import jinja2
@@ -221,16 +222,22 @@ class GeoView(webapp2.RequestHandler):
 class GeoViewHandler(webapp2.RequestHandler):
     def post(self):
         stream_name = self.request.get("stream_name")
-        min = int(self.request.get("min"))
-        max = int(self.request.get("max"))
+        # min = int(self.request.get("min"))
+        # max = int(self.request.get("max"))
         pictures = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1 ORDER BY uploadDate DESC",
                                       db.Key.from_path('StreamModel', stream_name))
-        keys = []
+        info = []
+        ma = []
+        # info['markers'] = ma
         for picture in pictures:
-            keys.append(str(picture.key()))
-        keys = json.dumps(keys)
+        #     temp = {}
+        #     # temp['content'] = '<img src="/pic?pic_id='+picture.key()+'"/>'
+        #     temp['content'] = 'Haha!'
+        #     info['markers'].append(temp)
+            info.append(str('<img src="pic?pic_id=' + str(picture.key()) +'"  height="42" width="42" />'))
+        info=json.dumps(info)
         self.response.headers['Content-Type'] = "application/json"
-        self.response.write(keys)
+        self.response.write(info)
 
 app = webapp2.WSGIApplication([
     ('/showmore.*', ShowMore),

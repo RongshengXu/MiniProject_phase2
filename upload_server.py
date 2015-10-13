@@ -179,9 +179,11 @@ class UploadHandler(webapp2.RequestHandler):
                 # if key is not None:
             results.append(result)
         return results
+    def get(self):
+        returnURL = self.request.headers['Referer']
+        self.redirect(returnURL)
 
     def post(self):
-        returnURL = self.request.headers['Referer']
         stream_name = re.findall('=(.*)', returnURL)[0]
         # if (self.request.get('_method') == 'DELETE'):
         #     return self.delete()
@@ -191,7 +193,6 @@ class UploadHandler(webapp2.RequestHandler):
         if 'application/json' in self.request.headers.get('Accept'):
             self.response.headers['Content-Type'] = 'application/json'
         self.response.write(s)
-        #self.redirect(returnURL)
 
 app = webapp2.WSGIApplication(
     [
