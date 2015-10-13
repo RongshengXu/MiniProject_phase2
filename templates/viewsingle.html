@@ -64,9 +64,10 @@
                 <div class="col-md-12 col-sm-12 col-xs-12 text-right">
                     <!--<a href="{{GeoViewURL}}"> Geo View </a>-->
                     <form action={{GeoViewURL}} method="get">
-                        <input type="submit" class="button button-pill" value="Geo View">
+                        <input type="submit" class="btn btn-info" value="Geo View">
                     </form>
                 </div>
+                <div class="gap_middle"></div>
                 {% for picture in picture_info %}
                     {% if picture[0]< picture_per_stream %}
                         <div class="col-md-4 col-sm-4 col-xs-12">
