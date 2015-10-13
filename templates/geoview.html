@@ -33,7 +33,7 @@
 
     <script type="text/javascript">
     $(document).ready(function() {
-            var yourStartLatLng = new google.maps.LatLng(59.3426606750, 18.0736160278);
+            var yourStartLatLng = new google.maps.LatLng(30.287141, -97.736478);
             var query_begin = null;
             var query_end = null;
             var bounds = null;
@@ -167,8 +167,12 @@
             <div class="panel-heading">
                 <h3 id="streamname" class="muted">{{stream_name}}</h3>
                 <!--<p> Click Makers to view the pictures </p>-->
-                <div id="map_canvas" style="width:1100px;height:450px" class="map"> Map </div>
             </div>
+        <div class="panel-body">
+            <div class = "col-md-12">
+                <div id="map_canvas" style="height:450px" class="map"> Map </div>
+            </div>
+        </div>
         </div>
         <p>
             <label for="amount">Time Range:</label>
