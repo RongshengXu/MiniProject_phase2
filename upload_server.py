@@ -184,6 +184,7 @@ class UploadHandler(webapp2.RequestHandler):
         self.redirect(returnURL)
 
     def post(self):
+        returnURL = self.request.headers['Referer']
         stream_name = re.findall('=(.*)', returnURL)[0]
         # if (self.request.get('_method') == 'DELETE'):
         #     return self.delete()
