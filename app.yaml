@@ -89,6 +89,14 @@ handlers:
   script: ViewSingleHandler.app
   login: required
 
+- url: /geo
+  script: ViewSingleHandler.app
+  login: required
+
+- url: /geoview.*
+  script: ViewSingleHandler.app
+  login: required
+
 - url: /showmore.*
   script: ViewSingleHandler.app
   login: required

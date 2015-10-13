@@ -35,7 +35,7 @@
                     <li><a href="search">Search</a></li>
                     <li><a href="trending">Trending</a></li>
                     <li><a href="social">Social</a></li>
-                    <li><a href={{url}}>{{url_linktext}}</a><li></li>
+                    <!--<li><a href={{url}}>{{url_linktext}}</a><li></li>-->
                 </ul>
             </div>
         </nav>
@@ -61,6 +61,12 @@
                 </div>
             </div>
             <div class="panel-body">
+                <div class="col-md-12 col-sm-12 col-xs-12 text-right">
+                    <!--<a href="{{GeoViewURL}}"> Geo View </a>-->
+                    <form action={{GeoViewURL}} method="get">
+                        <input type="submit" class="button button-pill" value="Geo View">
+                    </form>
+                </div>
                 {% for picture in picture_info %}
                     {% if picture[0]< picture_per_stream %}
                         <div class="col-md-4 col-sm-4 col-xs-12">
@@ -72,6 +78,7 @@
                     {% endif %}
                 {% endfor %}
                 <div class="col-md-12 col-sm-12 col-xs-12 gap_small"></div>
+                <!--view more pictures-->
                 <div class="col-md-12 col-sm-12 col-xs-12 text-right">
                     <form action={{more_pictureURL}} method="post">
                         <input type="submit" class="button button-pill" value="More Pictures">

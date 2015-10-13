@@ -169,7 +169,7 @@ class UploadHandler(webapp2.RequestHandler):
                 num = self.add(ndb.Key('StreamModel', stream.key.id()))
                 user_picture = PictureModel(parent = db.Key.from_path('StreamModel', stream_name))
                 user_picture.id = str(num)
-                picture = images.resize(picture, 320, 400)
+                picture = images.resize(picture, 640, 800)
                 user_picture.picture = db.Blob(picture)
                 stream.lastUpdated = user_picture.uploadDate
                 user_picture.put()

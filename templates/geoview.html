@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/common-style.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <script type="text/javascript" src="/assets/js/map/modernizr.min.js"></script>
+	<script src="/assets/js/jquery-1.11.0.min.js"></script>
+    <script src="/assets/js/lightbox.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/map/mapapi.js"></script>
+
+		<script type="text/javascript" src="/assets/js/map/underscore.min.js"></script>
+
+		<!--<script type="text/javascript" src="/assets/js/map/backbone.min.js"></script>-->
+
+		<script type="text/javascript" src="/assets/js/map/prettify.min.js"></script>
+
+		<script type="text/javascript" src="/assets/js/map/demo.js"></script>
+
+		<script type="text/javascript" src="/assets/js/map/markerclusterer.min.js"></script>
+
+		<script type="text/javascript" src="/assets/js/map/jquery.ui.map.js"></script>
+    <script src="/assets/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/assets/js/map/min/jquery.ui.map.full.min.js" type="text/javascript"></script>
+
+    <!--<script src="/assets/js/timeline/jquery-1.10.2.js"></script>-->
+    <script src="/assets/js/timeline/jquery-ui.js"></script>
+    <!--<link rel="stylesheet" href="/resources/demos/style.css">-->
+
+    <script>
+    $(document).ready(function() {
+            var yourStartLatLng = new google.maps.LatLng(59.3426606750, 18.0736160278);
+            $('#map_canvas').gmap({'center': yourStartLatLng});
+            $('#map_canvas').gmap({'zoom': 2, 'disableDefaultUI':true}).bind('init', function(evt, map) {
+                var bounds = map.getBounds();
+                var southWest = bounds.getSouthWest();
+                var northEast = bounds.getNorthEast();
+                var lngSpan = northEast.lng() - southWest.lng();
+                var latSpan = northEast.lat() - southWest.lat();
+                for ( var i = 0; i < 1000; i++ ) {
+                    var lat = southWest.lat() + latSpan * Math.random();
+                    var lng = southWest.lng() + lngSpan * Math.random();
+                    $('#map_canvas').gmap('addMarker', {
+                        'position': new google.maps.LatLng(lat, lng)
+                    }).click(function() {
+                        $('#map_canvas').gmap('openInfoWindow', { content : 'Hello world!' }, this);
+                    });
+                }
+                $('#map_canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
+            });
+            function date(data) {
+                return $.datepicker.formatDate("MM dd, yy", data)
+            }
+            var query_begin = null;
+            var query_end = null;
+
+            function set_query_date(begin, end) {
+                query_begin = begin;
+                query_end = end;
+            }
+            function setDateRange(min, max) {
+                var prev_year = new Date();
+                prev_year.setYear(prev_year.getFullYear() - 1);
+
+                var lowDate = new Date(prev_year);
+                lowDate.setDate(prev_year.getDate() + min);
+
+                var highDate = new Date(prev_year);
+                highDate.setDate(prev_year.getDate() + max);
+
+                var label = 'from ' + date(lowDate) + " to " + date(highDate);
+                set_query_date(lowDate, highDate);
+
+                $( "#amount" ).html(label);
+            }
+            $( "#slider-range" ).slider({
+                range: true,
+                min: 0,
+                max: 365,
+                values: [ 0, 365 ],
+                slide: function( event, ui ) {
+                    setDateRange(ui.values[0], ui.values[1]);
+                }
+            });
+            setDateRange(
+                $("#slider-range").slider("values", 0),
+                $("#slider-range").slider("values", 1)
+            );
+    });
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <div class="navbar-header">
+                <p class="navbar-brand">Connex.us</p>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a href="manage">Manage</a></li>
+                    <li><a href="create">Create</a></li>
+                    <li><a href="view">View</a></li>
+                    <li><a href="search">Search</a></li>
+                    <li><a href="trending">Trending</a></li>
+                    <li><a href="social">Social</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 id="streamname" class="muted">{{stream_name}}</h3>
+                <!--<p> Click Makers to view the pictures </p>-->
+                <div id="map_canvas" style="width:1100px;height:450px" class="map"> Map </div>
+            </div>
+        </div>
+        <p>
+            <label for="amount">Time Range:</label>
+            <span type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;"></span>
+        </p>
+        <div id="slider-range"></div>
+    </div>
+    <div class="container">
+        <a href="{{stream_url}}"> Go Back </a>
+    </div>
+</body>
+</html>

@@ -61,6 +61,8 @@ class ViewSingle(webapp2.RequestHandler):
                     #self.response.write(picture.id)
 
             morePictureURL = urllib.urlencode({'showmore':stream_name+"=="+str(index)})
+            geoviewURL = urllib.urlencode({'geoview':stream_name})
+
             countView_query = CountViewModel.query(CountViewModel.name==stream_name).fetch()
 
             if user.nickname() in stream.subscribers:
@@ -87,7 +89,8 @@ class ViewSingle(webapp2.RequestHandler):
                 'picture_per_stream': NUM_PICTURE_PER_STREAM,
                 'more_pictureURL': morePictureURL,
                 'countView_query': countView_query,
-                'url': url
+                'url': url,
+                'GeoViewURL': geoviewURL
             }
             self.response.write(template.render(template_values))
 
@@ -192,6 +195,43 @@ class UnsubscribeSingle(webapp2.RequestHandler):
             stream.put()
         self.redirect(returnURL)
 
+class GeoView(webapp2.RequestHandler):
+    def get(self):
+        stream_name = re.findall('%3D(.*)', self.request.url)[0]
+        stream_query = StreamModel.query(StreamModel.name == stream_name).fetch()
+        if (len(stream_query)>0):
+            stream = stream_query[0]
+            pictures = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1 ORDER BY uploadDate DESC",
+                                          db.Key.from_path('StreamModel', stream_name))
+            pictures_key = []
+            for picture in pictures:
+                pictures_key.append(str(picture.key()))
+            stream_url = urllib.urlencode({'streamname': stream.name})
+
+            template = JINJA_ENVIRONMENT.get_template('templates/geoview.html')
+            template_values = {
+                'stream_name': stream_name,
+                'min': str(stream.createTime),
+                'num': str(),
+                'keys': pictures_key,
+                'stream_url': stream_url
+            }
+            self.response.write(template.render(template_values))
+
+class GeoViewHandler(webapp2.RequestHandler):
+    def post(self):
+        stream_name = self.request.get("stream_name")
+        min = int(self.request.get("min"))
+        max = int(self.request.get("max"))
+        pictures = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1 ORDER BY uploadDate DESC",
+                                      db.Key.from_path('StreamModel', stream_name))
+        keys = []
+        for picture in pictures:
+            keys.append(str(picture.key()))
+        keys = json.dumps(keys)
+        self.response.headers['Content-Type'] = "application/json"
+        self.response.write(keys)
+
 app = webapp2.WSGIApplication([
     ('/showmore.*', ShowMore),
     ('/stream.*', ViewSingle),
@@ -201,5 +241,7 @@ app = webapp2.WSGIApplication([
     ('/subscribe.*', Subscirbe),
     ('/clearviewcount', clearViewCount),
     ('/unsubscribesingle.*', UnsubscribeSingle),
-    ('/routingerror', RoutingError)
+    ('/routingerror', RoutingError),
+    ('/geoview.*', GeoView),
+    ('/geo', GeoViewHandler)
 ], debug=True)
