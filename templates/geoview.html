@@ -36,12 +36,12 @@
             var yourStartLatLng = new google.maps.LatLng(59.3426606750, 18.0736160278);
             var query_begin = null;
             var query_end = null;
-
+            var bounds = null;
             // map
             $('#map_canvas').gmap({'center': yourStartLatLng});
             $('#map_canvas').gmap({'zoom': 2, 'disableDefaultUI':true}).bind('init', function(evt, map) {
 
-                var bounds = map.getBounds();
+                bounds = map.getBounds();
                 var southWest = bounds.getSouthWest();
                 var northEast = bounds.getNorthEast();
                 var lngSpan = northEast.lng() - southWest.lng();
@@ -56,16 +56,18 @@
                     success: function(results) {
                         $.each( results, function(index, value) {
                             var lat = southWest.lat() + latSpan * Math.random();
-		                    var lng = southWest.lng() + lngSpan * Math.random();
+                            var lng = southWest.lng() + lngSpan * Math.random();
+                            d = {"stream_name":'{{stream_name}}',"min":query_begin, "max":query_end};
                             $('#map_canvas').gmap('addMarker', {
                                 'position': new google.maps.LatLng(lat, lng)
                             }).click(function() {
-			                    $('#map_canvas').gmap('openInfoWindow', { content : value }, this);
-		                    });
+                                $('#map_canvas').gmap('openInfoWindow', { content : value }, this);
+                            });
                         });
                         $('#map_canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
                     }
                 });
+
             });
 
 
@@ -100,8 +102,38 @@
                 values: [ 0, 365 ],
                 slide: function( event, ui ) {
                     setDateRange(ui.values[0], ui.values[1]);
+                },
+                stop: function( event, ui ) {
+                    setDateRange(ui.values[0], ui.values[1]);
+                    var southWest = bounds.getSouthWest();
+                    var northEast = bounds.getNorthEast();
+                    var lngSpan = northEast.lng() - southWest.lng();
+                    var latSpan = northEast.lat() - southWest.lat();
+                    var d = {"stream_name":'{{stream_name}}',"min":query_begin, "max":query_end};
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/geo",
+                        data: d,
+                        dataType: "json",
+                        success: function(results) {
+                            $('#map_canvas').gmap('clear', 'markers');
+                            $.each( results, function(index, value) {
+                                var lat = southWest.lat() + latSpan * Math.random();
+                                var lng = southWest.lng() + lngSpan * Math.random();
+                                d = {"stream_name":'{{stream_name}}',"min":query_begin, "max":query_end};
+                                $('#map_canvas').gmap('addMarker', {
+                                    'position': new google.maps.LatLng(lat, lng)
+                                }).click(function() {
+                                    $('#map_canvas').gmap('openInfoWindow', { content : value }, this);
+                                });
+                            });
+                            $('#map_canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
+                        }
+                    });
                 }
             });
+
             setDateRange(
                 $("#slider-range").slider("values", 0),
                 $("#slider-range").slider("values", 1)
@@ -109,43 +141,7 @@
     });
     </script>
 
-    <!--$.getJSON('/geo', {-->
-                        <!--type: 'POST',-->
-                        <!--name: '{{stream_name}}',-->
-                        <!--min: query_begin.toISOString(),-->
-                        <!--max: query_end.toISOString()-->
-                    <!--},-->
-                    <!--function(data) {-->
-
-                        <!--var lat = southWest.lat() + latSpan * Math.random();-->
-		                <!--var lng = southWest.lng() + lngSpan * Math.random();-->
-                        <!--//$.each( data.markers, function(i, marker) {-->
-                        <!--for ( var i = 0; i < 100; i++ ) {-->
-                            <!--$my_map.gmap('addMarker', {-->
-                                <!--'position': new google.maps.LatLng(lat, lng)-->
-                            <!--}).click(function() {-->
-			                    <!--$my_map.gmap('openInfoWindow', { content : data }, this);-->
-		                    <!--});;-->
-                        <!--//});-->
-                        <!--}-->
-                    <!--});-->
-
-                <!--$ajax.done ( function() {-->
-
-                    <!--$my_dmap.gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));-->
-                <!--})-->
-    <!---->
-    <!--for ( var i = 0; i < 100; i++ ) {-->
-                    <!--var lat = southWest.lat() + latSpan * Math.random();-->
-                    <!--var lng = southWest.lng() + lngSpan * Math.random();-->
-                    <!--$('#map_canvas').gmap('addMarker', {-->
-                        <!--'position': new google.maps.LatLng(lat, lng)-->
-                    <!--}).click(function() {-->
-                        <!--$('#map_canvas').gmap('openInfoWindow', { content : '<img src="" />' }, this);-->
-                    <!--});-->
-                <!--}-->
-                <!--$('#map_canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));-->
-
+    
 </head>
 <body>
     <div class="container">

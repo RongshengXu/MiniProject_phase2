@@ -7,11 +7,14 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext.webapp.util import run_wsgi_app
 from ViewHandler import View
+from datetime import datetime, date
+
 
 import webapp2
 import re
 import urllib
 import json
+import time
 
 import os
 import jinja2
@@ -222,19 +225,33 @@ class GeoView(webapp2.RequestHandler):
 class GeoViewHandler(webapp2.RequestHandler):
     def post(self):
         stream_name = self.request.get("stream_name")
-        # min = int(self.request.get("min"))
-        # max = int(self.request.get("max"))
+        min = self.request.get("min")
+        max = self.request.get("max")
         pictures = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1 ORDER BY uploadDate DESC",
                                       db.Key.from_path('StreamModel', stream_name))
         info = []
-        ma = []
+        begin = min.split(" ")
+        end = max.split(" ")
+        lower = begin[1] + " " + begin[2] + " " + begin[3]
+        upper = end[1] + " " + end[2] + " " + end[3]
+        l = datetime.strptime(lower, "%b %d %Y")
+        u = datetime.strptime(upper, "%b %d %Y")
+        # begin = datetime.strptime(min, "%a %b %d %y %X %Z")
+        # end = datetime.strptime(max, "%a %b %d %y %X %Z" )
+        # ma = []
+        stream_url = urllib.urlencode({'streamname': stream_name})
         # info['markers'] = ma
         for picture in pictures:
+            if picture.Date > l.date() and picture.Date <= u.date():
+                label = '<a href="'+ stream_url +'">'+\
+                         '<img src="pic?pic_id=' + str(picture.key()) +'"  height="100" width="100" />' +\
+                         '<br>' + str(picture.Date) + '</a>'
+                info.append(str(label))
         #     temp = {}
         #     # temp['content'] = '<img src="/pic?pic_id='+picture.key()+'"/>'
         #     temp['content'] = 'Haha!'
         #     info['markers'].append(temp)
-            info.append(str('<img src="pic?pic_id=' + str(picture.key()) +'"  height="42" width="42" />'))
+        #     info.append(str('<img src="pic?pic_id=' + str(picture.key()) +'"  height="42" width="42" />'))
         info=json.dumps(info)
         self.response.headers['Content-Type'] = "application/json"
         self.response.write(info)
@@ -244,7 +261,6 @@ app = webapp2.WSGIApplication([
     ('/stream.*', ViewSingle),
     ('/upload', Upload),
     ('/pic.*', ViewPictureHandler),
-    #('/view_picture/([^/]+)?', ViewPictureHandler),
     ('/subscribe.*', Subscirbe),
     ('/clearviewcount', clearViewCount),
     ('/unsubscribesingle.*', UnsubscribeSingle),

@@ -47,3 +47,4 @@ class PictureModel(db.Model):
     #stream = db.StringProperty()
     id = db.StringProperty()
     uploadDate = db.DateTimeProperty(auto_now_add=True)
+    Date = db.DateProperty(auto_now_add=True)
