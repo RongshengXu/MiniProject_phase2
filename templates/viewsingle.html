@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/common-style.css" />
+    <link href="/assets/css/lightbox.css" rel="stylesheet">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-    <script src="/assets/js/lightbox.js"></script>
     <!-- Generic page styles -->
     <!--<link rel="stylesheet" href="/assets/css/style.css">-->
     <!-- jQuery UI styles -->
@@ -21,7 +21,14 @@
     <!-- CSS adjustments for browsers with JavaScript disabled -->
     <noscript><link rel="stylesheet" href="/assets/css/jquery.fileupload-noscript.css"></noscript>
     <noscript><link rel="stylesheet" href="/assets/css/jquery.fileupload-ui-noscript.css"></noscript>
-    <script></script>
+    <script>
+        lightbox.option({
+          'maxWidth': 200,
+          'maxHeight':300
+          'resizeDuration': 200,
+          'wrapAround': true
+        })
+    </script>
 </head>
 <body>
     <div class="container">
@@ -62,6 +69,7 @@
                     </small>
                 </div>
             </div>
+            <script src="/assets/js/lightbox.js"></script>
             <div class="panel-body">
                 <div class="col-md-12 col-sm-12 col-xs-12 text-right">
                     <!--<a href="{{GeoViewURL}}"> Geo View </a>-->
@@ -75,9 +83,9 @@
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <!--<div class="thumbnail clickable">-->
                                 <!--<img src="/view_picture/{{picture[2]}}" class="img-responsive img-rounded single_pic"/>-->
-                            <!--<a href="/pic?pic_id={{picture[2]}}" data-lightbox="image-1">-->
+                            <a href="/getimage?pic_id={{picture[2]}}" data-lightbox="image-1">
                                 <img src="pic?pic_id={{picture[2]}}" class="img-responsive img-rounded single_pic"/>
-                            <!--</a>-->
+                            </a>
                             <!--</div>-->
                         </div>
                     {% endif %}

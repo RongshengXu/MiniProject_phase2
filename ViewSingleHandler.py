@@ -263,6 +263,12 @@ class GeoViewHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = "application/json"
         self.response.write(info)
 
+class Image(webapp2.RequestHandler):
+    def get(self):
+        pic = db.get(self.request.get('pic_id'))
+        self.response.headers['Content-Type'] = 'image/jpeg'
+        self.response.out.write(pic.picture)
+
 app = webapp2.WSGIApplication([
     ('/showmore.*', ShowMore),
     ('/stream.*', ViewSingle),
@@ -273,5 +279,6 @@ app = webapp2.WSGIApplication([
     ('/unsubscribesingle.*', UnsubscribeSingle),
     ('/routingerror', RoutingError),
     ('/geoview.*', GeoView),
+    ('/getimage.*', Image),
     ('/geo', GeoViewHandler)
 ], debug=True)

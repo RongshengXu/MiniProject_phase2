@@ -74,6 +74,10 @@ handlers:
   script: SearchHandler.app
   login: required
 
+- url: /getimage.*
+  script: ViewSingleHandler.app
+  login: required
+
 - url: /routingerror
   script: ViewSingleHandler.app
 
