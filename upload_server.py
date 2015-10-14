@@ -19,6 +19,7 @@ import os
 import re
 import urllib
 import webapp2
+import random
 
 DEBUG=os.environ.get('SERVER_SOFTWARE', '').startswith('Dev')
 WEBSITE = 'https://blueimp.github.io/jQuery-File-Upload/'
@@ -172,6 +173,8 @@ class UploadHandler(webapp2.RequestHandler):
                 picture = images.resize(picture, 640, 800)
                 user_picture.picture = db.Blob(picture)
                 stream.lastUpdated = user_picture.uploadDate
+                user_picture.lat = random.random()
+                user_picture.lg = random.random()
                 user_picture.put()
                 # key = self.write_blob(
                 #     picture, result

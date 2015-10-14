@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/assets/css/common-style.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="/assets/js/lightbox.js"></script>
     <!-- Generic page styles -->
     <!--<link rel="stylesheet" href="/assets/css/style.css">-->
     <!-- jQuery UI styles -->
@@ -16,6 +17,7 @@
     <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
     <link rel="stylesheet" href="/assets/css/jquery.fileupload.css">
     <link rel="stylesheet" href="/assets/css/jquery.fileupload-ui.css">
+    <link href="/assets/css/lightbox.css" rel="stylesheet">
     <!-- CSS adjustments for browsers with JavaScript disabled -->
     <noscript><link rel="stylesheet" href="/assets/css/jquery.fileupload-noscript.css"></noscript>
     <noscript><link rel="stylesheet" href="/assets/css/jquery.fileupload-ui-noscript.css"></noscript>
@@ -73,7 +75,9 @@
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <!--<div class="thumbnail clickable">-->
                                 <!--<img src="/view_picture/{{picture[2]}}" class="img-responsive img-rounded single_pic"/>-->
+                            <!--<a href="/pic?pic_id={{picture[2]}}" data-lightbox="image-1">-->
                                 <img src="pic?pic_id={{picture[2]}}" class="img-responsive img-rounded single_pic"/>
+                            <!--</a>-->
                             <!--</div>-->
                         </div>
                     {% endif %}

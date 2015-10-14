@@ -18,6 +18,7 @@ import time
 
 import os
 import jinja2
+import random
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -229,7 +230,7 @@ class GeoViewHandler(webapp2.RequestHandler):
         max = self.request.get("max")
         pictures = db.GqlQuery("SELECT *FROM PictureModel WHERE ANCESTOR IS :1 ORDER BY uploadDate DESC",
                                       db.Key.from_path('StreamModel', stream_name))
-        info = []
+        info = {}
         begin = min.split(" ")
         end = max.split(" ")
         lower = begin[1] + " " + begin[2] + " " + begin[3]
@@ -241,12 +242,18 @@ class GeoViewHandler(webapp2.RequestHandler):
         # ma = []
         stream_url = urllib.urlencode({'streamname': stream_name})
         # info['markers'] = ma
+        info["label"] = []
+        pos = {}
         for picture in pictures:
             if picture.Date > l.date() and picture.Date <= u.date():
+                m = {}
                 label = '<a href="'+ stream_url +'">'+\
                          '<img src="pic?pic_id=' + str(picture.key()) +'"  height="100" width="100" />' +\
                          '<br>' + str(picture.Date) + '</a>'
-                info.append(str(label))
+                m['lat'] = picture.lat
+                m['lg'] = picture.lg
+                m["label"] = label
+                info["label"].append(m)
         #     temp = {}
         #     # temp['content'] = '<img src="/pic?pic_id='+picture.key()+'"/>'
         #     temp['content'] = 'Haha!'

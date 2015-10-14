@@ -54,14 +54,14 @@
                     data: d,
                     dataType: "json",
                     success: function(results) {
-                        $.each( results, function(index, value) {
-                            var lat = southWest.lat() + latSpan * Math.random();
-                            var lng = southWest.lng() + lngSpan * Math.random();
+                        $.each( results.label, function(index, value) {
+                            var lat = southWest.lat() + latSpan * value.lat;
+                            var lng = southWest.lng() + lngSpan * value.lg;
                             d = {"stream_name":'{{stream_name}}',"min":query_begin, "max":query_end};
                             $('#map_canvas').gmap('addMarker', {
                                 'position': new google.maps.LatLng(lat, lng)
                             }).mouseover(function() {
-                                $('#map_canvas').gmap('openInfoWindow', { content : value }, this);
+                                $('#map_canvas').gmap('openInfoWindow', { content : value.label}, this);
                             });
                         });
                         $('#map_canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
@@ -118,14 +118,14 @@
                         dataType: "json",
                         success: function(results) {
                             $('#map_canvas').gmap('clear', 'markers');
-                            $.each( results, function(index, value) {
-                                var lat = southWest.lat() + latSpan * Math.random();
-                                var lng = southWest.lng() + lngSpan * Math.random();
+                            $.each( results.label, function(index, value) {
+                                var lat = southWest.lat() + latSpan * value.lat;
+                                var lng = southWest.lng() + lngSpan * value.lg;
                                 d = {"stream_name":'{{stream_name}}',"min":query_begin, "max":query_end};
                                 $('#map_canvas').gmap('addMarker', {
                                     'position': new google.maps.LatLng(lat, lng)
                                 }).mouseover(function() {
-                                    $('#map_canvas').gmap('openInfoWindow', { content : value }, this);
+                                    $('#map_canvas').gmap('openInfoWindow', { content : value.label }, this);
                                 });
                             });
                             $('#map_canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));

@@ -44,6 +44,8 @@ class PictureModel(db.Model):
     """ picture model
     """
     picture = db.BlobProperty()
+    lat = db.FloatProperty()
+    lg = db.FloatProperty()
     #stream = db.StringProperty()
     id = db.StringProperty()
     uploadDate = db.DateTimeProperty(auto_now_add=True)
