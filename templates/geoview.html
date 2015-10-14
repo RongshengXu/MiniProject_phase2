@@ -60,7 +60,7 @@
                             d = {"stream_name":'{{stream_name}}',"min":query_begin, "max":query_end};
                             $('#map_canvas').gmap('addMarker', {
                                 'position': new google.maps.LatLng(lat, lng)
-                            }).click(function() {
+                            }).mouseover(function() {
                                 $('#map_canvas').gmap('openInfoWindow', { content : value }, this);
                             });
                         });
@@ -124,7 +124,7 @@
                                 d = {"stream_name":'{{stream_name}}',"min":query_begin, "max":query_end};
                                 $('#map_canvas').gmap('addMarker', {
                                     'position': new google.maps.LatLng(lat, lng)
-                                }).click(function() {
+                                }).mouseover(function() {
                                     $('#map_canvas').gmap('openInfoWindow', { content : value }, this);
                                 });
                             });
