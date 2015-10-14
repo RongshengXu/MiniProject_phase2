@@ -49,12 +49,16 @@ class SearchResult(webapp2.RequestHandler):
 
 class AutoAPI(webapp2.RequestHandler):
      def get(self):
+        # patten = self.request.get('term')
+        # print patten
         streams = StreamModel.query().fetch()
         namelist = list()
         for stream in streams:
+            # if patten in stream.name:
             namelist.append(stream.name)
             for tag in stream.tag:
-                namelist.append(tag)
+                # if (patten in tag) and (tag != ""):
+                    namelist.append(tag)
 
         namelist.sort()
         list_json = {"namelist": namelist}

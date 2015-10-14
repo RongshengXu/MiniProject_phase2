@@ -6,6 +6,7 @@ $(document).ready(function(){
         success: function(data){
             var availableTagsh = data.namelist;
             $("#autoc").autocomplete({
+                minLenth: 1,
                 source: availableTagsh
             });
         }
