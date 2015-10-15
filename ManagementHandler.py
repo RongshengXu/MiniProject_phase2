@@ -27,12 +27,12 @@ class ManagementPage(webapp2.RequestHandler):
             url_linktext = 'Logout'
             stream_query = StreamModel.query(StreamModel.author==user).order(-StreamModel.createTime).fetch()
             stream_query_all = StreamModel.query().fetch()
-            findone = False
+            findone = 0
 
             if (len(stream_query_all)>0):
                 for stream in stream_query_all:
-                    if user.nickname in stream.subscribers:
-                        findone = True
+                    if user.nickname() in stream.subscribers:
+                        findone = 1
 
             template_values = {
                 'user': user,
